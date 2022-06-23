@@ -208,13 +208,13 @@ public class SensorData extends AppCompatActivity implements SensorEventListener
             Log.i(TAG, "gravity earth "+ Arrays.toString(earthAcc));
 
 
-            // if the phone is steady
-            if (isFirstStep && Math.abs(linear_acceleration[0]) < 1e-3 && Math.abs(linear_acceleration[1]) < 1e-3 && Math.abs(linear_acceleration[2]) < 1e-3) {
-                Log.d(TAG, "first entry");
-                velocity = new float[3];
-                displacement = new float[3];
-                isFirstStep = false;
-            }
+//            // if the phone is steady
+//            if (isFirstStep && Math.abs(linear_acceleration[0]) < 1e-3 && Math.abs(linear_acceleration[1]) < 1e-3 && Math.abs(linear_acceleration[2]) < 1e-3) {
+//                Log.d(TAG, "first entry");
+//                velocity = new float[3];
+//                displacement = new float[3];
+//                isFirstStep = false;
+//            }
 //            if (Math.abs(linear_acceleration[0]) < 1e-2 ){
 //                linear_acceleration[0] = 0;
 //
@@ -252,15 +252,6 @@ public class SensorData extends AppCompatActivity implements SensorEventListener
                     velocity[1] + earthAcc[1] * dT,
                     velocity[2] + earthAcc[2] * dT
             };
-            if (Math.abs(velocity[2] - next_vel[2]) < 1e-2 &&
-                    Math.abs(velocity[1] - next_vel[1]) < 1e-2 &&
-                    Math.abs(velocity[0] - next_vel[0]) < 1e-2){
-                Log.i(TAG, "velocity next in ");
-
-                velocity = new float[3];
-            }
-
-            next_vel = velocity.clone();
 
             Log.d(TAG, "next displacement: " + Arrays.toString(displacement));
             //Log.d(TAG, "next velocity: " + Arrays.toString(velocity));
