@@ -10,6 +10,14 @@ public class KalmanPosition {
     private final float positionError;
     private float uncertainty;
     private final float[][] R = {new float[]{uncertainty, 0}, new float[]{0,uncertainty}};
+    private final float[][] I_9 = {
+        new float[]{0, 0, 0, 0, 0, 0},
+                new float[]{0, 0, 0, 0, 0, 0},
+                new float[]{0, 0, 0, 0, 0, 0},
+                new float[]{0, 0, 0, 0, 0, 0},
+                new float[]{0, 0, 0, 0, 0, 0},
+                new float[]{0, 0, 0, 0, 0, 0}
+    };
 
     private float[][] P;
     private float[][] K;
@@ -43,6 +51,15 @@ public class KalmanPosition {
                 new float[]{0, 0, 0, 0, this.positionError, 0},
                 new float[]{0, 0, 0, 0, 0, 0}
         };
+    }
+
+    public void updateP(final float dT){
+        final float[][] F = getF(dT);
+        final float[][] Q = getQ(dT, 1);
+        final float [][] firstTerm = MatrixOperations.substractMatrices(I_9, MatrixOperations.multiplyMatrices(K, H));
+        final float [][] firstFullTerm = MatrixOperations.multiplyMatrices(MatrixOperations.multiplyMatrices(firstTerm, P), MatrixOperations.transposeMatrix(firstTerm));
+        final float [][] secondFullTerm = MatrixOperations.multiplyMatrices(MatrixOperations.multiplyMatrices(K, R), MatrixOperations.transposeMatrix(K));
+        this.P = MatrixOperations.addMatrixes(firstFullTerm, secondFullTerm);
     }
 
 
@@ -85,14 +102,11 @@ public class KalmanPosition {
         };
     }
 
-
     //// Kalman gain
     public float[][] getKalmanGain(){
         final float[][] secondTerm = MatrixOperations.addMatrixes(MatrixOperations.multiplyMatrices(MatrixOperations.multiplyMatrices(H, P), MatrixOperations.transposeMatrix(H)), R);
         return MatrixOperations.multiplyMatrices(MatrixOperations.multiplyMatrices(P, MatrixOperations.transposeMatrix(H)), MatrixOperations.inverse(secondTerm));
     }
-
-
 
     public void predict(final float dt){
         predictNextState(dt);
@@ -102,15 +116,10 @@ public class KalmanPosition {
     public void update(final float[][] measured, final float dt){
         updateKalmanGain();
         estimateCurrentState(measured);
-        setNextP(dt);
-
-
+        updateP(dt);
     }
 
     public void updateKalmanGain(){
         this.K = getKalmanGain();
     }
-
-
-
 }

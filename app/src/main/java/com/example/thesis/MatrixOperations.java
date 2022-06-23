@@ -25,6 +25,16 @@ public class MatrixOperations {
         return result;
     }
 
+    public static float[][] multiplyElementByElement(float[][] firstMatrix, float[][] secondMatrix) {
+        float[][] result = new float[firstMatrix.length][firstMatrix.length];
+        for (int i = 0; i < secondMatrix.length; i++) {
+            for (int j = 0; j < secondMatrix.length; j++) {
+                result[i][j] = firstMatrix[i][j] * secondMatrix[i][j];
+            }
+        }
+        return result;
+    }
+
     public static float[][] substractMatrices(float[][] firstMatrix, float[][] secondMatrix) {
         float[][] result = new float[firstMatrix.length][firstMatrix.length];
         for (int i = 0; i < secondMatrix.length; i++) {
