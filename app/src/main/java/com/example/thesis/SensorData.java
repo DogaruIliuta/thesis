@@ -47,6 +47,7 @@ public class SensorData extends AppCompatActivity implements SensorEventListener
     float[] gravityValues = new float[3];
     float[] deltaRotationMatrix = new float[9];
     float[] next_vel = new float[3];
+    float[] next_acc = new float[3];
 
 
     private float instant_velovity;
@@ -189,7 +190,7 @@ public class SensorData extends AppCompatActivity implements SensorEventListener
 
             android.opengl.Matrix.invertM(inv, 0, R, 0);
             android.opengl.Matrix.multiplyMV(earthAcc, 0, inv, 0, deviceRelativeAcceleration, 0);
-            Log.d("Acceleration", "Values: (" + earthAcc[0] + ", " + earthAcc[1] + ", " + earthAcc[2] + ")");
+            Log.d(TAG, "Values: (" + earthAcc[0] + ", " + earthAcc[1] + ", " + earthAcc[2] + ")");
 
 
             // Isolate the force of gravity with the low-pass filter.
@@ -208,38 +209,37 @@ public class SensorData extends AppCompatActivity implements SensorEventListener
             Log.i(TAG, "gravity earth "+ Arrays.toString(earthAcc));
 
 
-//            // if the phone is steady
-//            if (isFirstStep && Math.abs(linear_acceleration[0]) < 1e-3 && Math.abs(linear_acceleration[1]) < 1e-3 && Math.abs(linear_acceleration[2]) < 1e-3) {
-//                Log.d(TAG, "first entry");
-//                velocity = new float[3];
-//                displacement = new float[3];
-//                isFirstStep = false;
-//            }
+            // if the phone is steady
+            if (isFirstStep && Math.abs(linear_acceleration[0]) < 1e-3 && Math.abs(linear_acceleration[1]) < 1e-3 && Math.abs(linear_acceleration[2]) < 1e-3) {
+                Log.d(TAG, "first entry");
+                velocity = new float[3];
+                displacement = new float[3];
+                isFirstStep = false;
+            }
 //            if (Math.abs(linear_acceleration[0]) < 1e-2 ){
-//                linear_acceleration[0] = 0;
+//                earthAcc[0] = 0;
 //
 //            }
 //            if (Math.abs(linear_acceleration[1]) < 1e-2 ){
-//                linear_acceleration[1] = 0;
+//                earthAcc[1] = 0;
 //
 //            }
 //            if (Math.abs(linear_acceleration[2]) < 1e-2 ){
-//                linear_acceleration[2] = 0;
+//                earthAcc[2] = 0;
 //
 //            }
 
-//            if (Math.abs(velocity[0]) < 5e-2  ){
-//                velocity[0] = 0;
-//            }
-//            if (Math.abs(velocity[1]) < 5e-2  ){
-//                velocity[1] = 0;
-//            }
-//            if (Math.abs(velocity[2]) < 5e-2 ){
-//                velocity[2] = 0;
-//            }
+            if (Math.abs(velocity[0]) < 1e-3  ){
+                velocity[0] = 0;
+            }
+            if (Math.abs(velocity[1]) < 1e-3  ){
+                velocity[1] = 0;
+            }
+            if (Math.abs(velocity[2]) < 1e-3 ){
+                velocity[2] = 0;
+            }
 
             Log.i(TAG, "velocity "+ Arrays.toString(velocity));
-            Log.i(TAG, "velocity next "+ Arrays.toString(next_vel));
 
 
             displacement = new float[]{
